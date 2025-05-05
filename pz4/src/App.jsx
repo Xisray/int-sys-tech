@@ -117,7 +117,7 @@ const expertDataPreset = {
 };
 
 const App = () => {
-  const [matrixA, setMatrixA] = useState([]);
+  const [matrixA, setMatrixA] = useState(null);
   const [pairResultData, setPairResultData] = useState(null);
   const [uSet, setUSet] = useState([]);
   const [lSet, setLSet] = useState([]);
@@ -152,14 +152,8 @@ const App = () => {
       if (dif <= 0.0000001) break;
     }
     const max = findMaxAbsolute(vectorW);
-    setPairResultData([
-      vectorW,
-      divideVectorByNumber(vectorW, max),
-    ]);
-    console.log([
-      vectorW,
-      divideVectorByNumber(vectorW, max),
-    ])
+    setPairResultData([vectorW, divideVectorByNumber(vectorW, max)]);
+    console.log([vectorW, divideVectorByNumber(vectorW, max)]);
   };
 
   const calculateMembership = () => {
@@ -207,6 +201,20 @@ const App = () => {
         <div class="form">
           <h3>Множество L</h3>
           <ArrayManager items={lSet} onItemsChange={handleLSetChange} />
+        </div>
+        <div className="form">
+          <h3>Матрица A</h3>
+          {matrixA ? <table style={{ borderCollapse: "collapse", width: "100%" }}>
+            <tbody>
+              {matrixA.map(vector => (<tr>
+                {vector.map(val => (<td style={{
+                      border: "1px solid #ddd",
+                      padding: "8px",
+                      whiteSpace: "pre-line",
+                    }}>{val.toFixed(3)}</td>))}
+              </tr>))}
+            </tbody>
+          </table> : <></>}
         </div>
         <div class="form">
           <h3>
@@ -269,17 +277,26 @@ const App = () => {
             <table style={{ borderCollapse: "collapse", width: "100%" }}>
               <thead>
                 <tr>
-                  <th style={{
-                    border: "1px solid #ddd",
-                    padding: "8px",
-                    whiteSpace: "pre-line",
-                  }}>Терм</th>
-                  {uSet.map((u, uIndex) => (
-                    <th style={{
+                  <th
+                    style={{
                       border: "1px solid #ddd",
                       padding: "8px",
                       whiteSpace: "pre-line",
-                    }} key={uIndex}>{u}</th>
+                    }}
+                  >
+                    Терм
+                  </th>
+                  {uSet.map((u, uIndex) => (
+                    <th
+                      style={{
+                        border: "1px solid #ddd",
+                        padding: "8px",
+                        whiteSpace: "pre-line",
+                      }}
+                      key={uIndex}
+                    >
+                      {u}
+                    </th>
                   ))}
                 </tr>
               </thead>
@@ -287,29 +304,39 @@ const App = () => {
                 {lSet.map((l) => (
                   <>
                     <tr>
-                      <td style={{
-                    border: "1px solid #ddd",
-                    padding: "8px",
-                    whiteSpace: "pre-line",
-                  }} rowSpan={2}>{l}</td>
-                      {uSet.map((u) => (
-                        <td style={{
-                          border: "1px solid #ddd",
-                          padding: "8px",
-                          whiteSpace: "pre-line",
-                        }}
-                        >{resultData[u][l].count}</td>
-                      ))}
-                    </tr>
-                    <tr>
-                      {uSet.map((u) => (
-                        <td
+                      <td
                         style={{
                           border: "1px solid #ddd",
                           padding: "8px",
                           whiteSpace: "pre-line",
                         }}
-                        >{resultData[u][l].percent}</td>
+                        rowSpan={2}
+                      >
+                        {l}
+                      </td>
+                      {uSet.map((u) => (
+                        <td
+                          style={{
+                            border: "1px solid #ddd",
+                            padding: "8px",
+                            whiteSpace: "pre-line",
+                          }}
+                        >
+                          {resultData[u][l].count}
+                        </td>
+                      ))}
+                    </tr>
+                    <tr>
+                      {uSet.map((u) => (
+                        <td
+                          style={{
+                            border: "1px solid #ddd",
+                            padding: "8px",
+                            whiteSpace: "pre-line",
+                          }}
+                        >
+                          {resultData[u][l].percent}
+                        </td>
                       ))}
                     </tr>
                   </>
@@ -334,36 +361,54 @@ const App = () => {
               </thead>
               <tbody>
                 <tr>
-                  <td style={{
-                    border: "1px solid #ddd",
-                    padding: "8px",
-                    whiteSpace: "pre-line",
-                  }}>Для субнормального нечеткого множества</td>
-                  {pairResultData[0].map((val) => (
-                    <td style={{
+                  <td
+                    style={{
                       border: "1px solid #ddd",
                       padding: "8px",
                       whiteSpace: "pre-line",
-                    }}>{`${val.toFixed(4)}`}</td>
+                    }}
+                  >
+                    Для субнормального нечеткого множества
+                  </td>
+                  {pairResultData[0].map((val) => (
+                    <td
+                      style={{
+                        border: "1px solid #ddd",
+                        padding: "8px",
+                        whiteSpace: "pre-line",
+                      }}
+                    >{`${val.toFixed(4)}`}</td>
                   ))}
                 </tr>
                 <tr>
-                  <td style={{
-                    border: "1px solid #ddd",
-                    padding: "8px",
-                    whiteSpace: "pre-line",
-                  }}>Для нормального нечеткого множества</td>
-                  {pairResultData[1].map((val) => (
-                    <td style={{
+                  <td
+                    style={{
                       border: "1px solid #ddd",
                       padding: "8px",
                       whiteSpace: "pre-line",
-                    }}>{val.toFixed(4)}</td>
+                    }}
+                  >
+                    Для нормального нечеткого множества
+                  </td>
+                  {pairResultData[1].map((val) => (
+                    <td
+                      style={{
+                        border: "1px solid #ddd",
+                        padding: "8px",
+                        whiteSpace: "pre-line",
+                      }}
+                    >
+                      {val.toFixed(4)}
+                    </td>
                   ))}
                 </tr>
               </tbody>
             </table>
-            <MembershipChart2 oXLabels ={['170', '175', '180', '185', '190', '195']} legendLabels={['субнормального нечеткого множества', 'нормального нечеткого множества']} resultData={pairResultData} />
+            <MembershipChart2
+              oXLabels={["170", "175", "180", "185", "190", "195"]}
+              legendLabels={["субнормального нечеткого множества", "нормального нечеткого множества"]}
+              resultData={pairResultData}
+            />
           </>
         ) : (
           <></>
