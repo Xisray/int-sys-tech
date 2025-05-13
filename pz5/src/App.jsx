@@ -87,61 +87,52 @@ function getEpsilon(expected, fact) {
 
 function App() {
   const [trainingDataFunction, setTrainingDataFunction] = useState("Implication");
-  // const [trainingData, setTrainingData] = useState(GetTrainingData(Settings.countInputNeurons, Settings.countOutputNeurons, TrainingDataFunctions.Implication));
-  // const [inputWeightMatrix, setInputWeightMatrix] = useState(GenerateWeightMatrix(Settings.countInputNeurons, Settings.countInputNeurons));
-  // const [outputWeightMatrix, setOutputWeightMatrix] = useState(GenerateWeightMatrix(Settings.countOutputNeurons, Settings.countInputNeurons));
-
   const [trainingData, setTrainingData] = useState(Settings.preset.trainingData);
   const [inputWeightMatrix, setInputWeightMatrix] = useState(Settings.preset.inputWeights);
   const [outputWeightMatrix, setOutputWeightMatrix] = useState(Settings.preset.outputWeights);
 
-  const test = () => {
-    // forwardStep(trainingData[2], inputWeightMatrix, outputWeightMatrix, Settings.preset.k, Settings.preset.speedRatio);
-    backwardStep(trainingData.matrixX[2], trainingData.vectorD[2], inputWeightMatrix, outputWeightMatrix, Settings.preset.k, Settings.preset.speedRatio);
-  };
+  // const test = () => {
+  //   backwardStep(trainingData.matrixX[2], trainingData.vectorD[2], inputWeightMatrix, outputWeightMatrix, Settings.preset.k, Settings.preset.speedRatio);
+  // };
 
-  // useEffect(() => {
-  //   setTrainingData(GetTrainingData(Settings.countInputNeurons, Settings.countOutputNeurons, TrainingDataFunctions[trainingDataFunction]))
-  // }, [trainingDataFunction]);
+  // const regenerateWeights = () => {
+  //   setInputWeightMatrix(GenerateWeightMatrix(Settings.countInputNeurons, Settings.countInputNeurons));
+  //   setOutputWeightMatrix(GenerateWeightMatrix(Settings.countOutputNeurons, Settings.countInputNeurons));
+  // };
 
-  const regenerateWeights = () => {
-    setInputWeightMatrix(GenerateWeightMatrix(Settings.countInputNeurons, Settings.countInputNeurons));
-    setOutputWeightMatrix(GenerateWeightMatrix(Settings.countOutputNeurons, Settings.countInputNeurons));
-  };
+  useEffect(() => {
+    setTrainingData(GetTrainingData(2, 1, ActivationFunctions[trainingDataFunction]));
+  }, [trainingDataFunction]);
 
   return (
     <div>
-      <button onClick={test}>Тест</button>
-      {/* <button onClick={() => hz(trainingData[1], inputWeightMatrix, outputWeightMatrix, Settings.k)}>Тест</button> */}
       <label>
         Функция
-        <select value={trainingDataFunction} onChange={(e) => setTrainingDataFunction(e.target.value)} name="training-function" id="training-function">
+        <select
+          style={{ marginLeft: "5px" }}
+          value={trainingDataFunction}
+          onChange={(e) => setTrainingDataFunction(e.target.value)}
+          name="training-function"
+          id="training-function"
+        >
           {Object.keys(TrainingDataFunctions).map((key) => (
             <option value={key}>{key}</option>
           ))}
         </select>
       </label>
-      {/* <table className="table">
-        <thead>
-          <tr>
-            {Array.from({ length: Settings.countInputNeurons }).map((_, index) => (
-              <th>X{index + 1}</th>
-            ))}
-            {Settings.countOutputNeurons == 1 ? <th>D</th> : Array.from({ length: Settings.countOutputNeurons }).map((_, index) => <th>D{index + 1}</th>)}
-          </tr>
-        </thead>
-        <tbody>
-          {trainingData.map((row) => (
+      {trainingData && trainingData[0] ? (
+        <table>
+          <thead>
             <tr>
-              {row.map((val) => (
-                <td>{val}</td>
+              {Array.from({ length: trainingData[0].length }).map((_, index) => (
+                <th>x{index}</th>
               ))}
             </tr>
-          ))}
-        </tbody>
-      </table> */}
-
-      <button onClick={regenerateWeights}>Перегенерировать веса</button>
+          </thead>
+        </table>
+      ) : (
+        <></>
+      )}
 
       <table className="table">
         <thead>
