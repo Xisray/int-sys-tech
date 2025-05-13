@@ -87,7 +87,11 @@ function getEpsilon(expected, fact) {
 
 function App() {
   const [trainingDataFunction, setTrainingDataFunction] = useState("Implication");
-  const [trainingData, setTrainingData] = useState(Settings.preset.trainingData);
+  const [trainingData, setTrainingData] = useState(Settings.preset.trainingData.matrixX);
+  const [resultTrainingData, setResultTrainingData] = useState(Settings.preset.trainingData.vectorD);
+
+  const [selectedVector, setSelectedVector] = useState(null);
+
   const [inputWeightMatrix, setInputWeightMatrix] = useState(Settings.preset.inputWeights);
   const [outputWeightMatrix, setOutputWeightMatrix] = useState(Settings.preset.outputWeights);
 
@@ -101,7 +105,10 @@ function App() {
   // };
 
   useEffect(() => {
-    setTrainingData(GetTrainingData(2, 1, ActivationFunctions[trainingDataFunction]));
+    const hz = GetTrainingData(2, 1, TrainingDataFunctions[trainingDataFunction]);
+    setTrainingData(hz[0]);
+    setResultTrainingData(hz[1]);
+    setSelectedVector([...hz[0][0], hz[1][0]])
   }, [trainingDataFunction]);
 
   return (
@@ -121,18 +128,45 @@ function App() {
         </select>
       </label>
       {trainingData && trainingData[0] ? (
-        <table>
+        <table class="table">
           <thead>
             <tr>
               {Array.from({ length: trainingData[0].length }).map((_, index) => (
                 <th>x{index}</th>
               ))}
+              <th>D</th>
             </tr>
           </thead>
+          <tbody>
+            {trainingData.map((row, rowIndex) => (
+              <tr>
+                {row.map(cell => (<td>{cell}</td>))}
+                <td>{resultTrainingData[rowIndex]}</td>
+              </tr>
+            ))}
+          </tbody>
         </table>
       ) : (
         <></>
       )}
+
+      <label>
+        Вектор
+        <select
+          style={{ marginLeft: "5px" }}
+          value={selectedVector}
+          onChange={(e) => {
+            setSelectedVector(e.target.value.split(',').map(val => Number(val)));
+            console.log(selectedVector);
+          }}
+          name="training-function"
+          id="training-function"
+        >
+          {trainingData.map((row, rowIndex) => (<option key={rowIndex} value={[...row, resultTrainingData[rowIndex]]}>
+            {`${row.join(" ")} ${resultTrainingData[rowIndex]}`}
+          </option>))}
+        </select>
+      </label>
 
       <table className="table">
         <thead>
