@@ -1,7 +1,6 @@
 import TrainingDataFunctions from "./TrainingDataFunctions";
 
 export function GetTrainingData(countInputNeurons, countOutputNeurons, func = TrainingDataFunctions.AND) {
-  const colCount = countInputNeurons + countOutputNeurons;
   const rowCount = 1 << countInputNeurons;
   const trainingData = new Array(rowCount);
   const resultTrainingData = new Array(rowCount);
