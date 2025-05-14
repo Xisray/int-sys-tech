@@ -15,18 +15,22 @@ function calculateVectorK(matrix, vectorK, y) {
 }
 
 export function calculateRelativeAssessment(matrix) {
+  const debug = {
+    str: ""
+  };
   const size = matrix.length;
   let y = sum(matrix);
   let id = 0;
-  console.log(y);
+  debug.str += `y = ${y}\n`;
   let prevVectorK = Array(size).fill(1);
-  console.log(`k[${id++}] = [ ${prevVectorK.join(", ")} ]`)
+  debug.str += `k[${id++}] = [ ${prevVectorK.join(", ")} ]\n`
   let curVectorK = calculateVectorK(matrix, prevVectorK, y);
   while(checkConvergence(prevVectorK, curVectorK, 0.01)) {
     y = sum(matrix.map((row) => row.map((cell, colInd) => cell * curVectorK[colInd])));
     prevVectorK = curVectorK;
     curVectorK = calculateVectorK(matrix, prevVectorK, y);
-    console.log(`k[${id++}] = [ ${prevVectorK.join(", ")} ]`)
+    debug.str += `k[${id++}] = [ ${prevVectorK.join(", ")} ]\n`
   }
-  console.log(`k[${id}] = [ ${curVectorK.join(", ")} ]`)
+  debug.str += `k[${id}] = [ ${curVectorK.join(", ")} ]\n`
+  return debug.str;
 }

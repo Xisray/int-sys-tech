@@ -1,30 +1,21 @@
 import React, { useState } from 'react';
 import './MatrixCalculator.css';
-import { calculateGroupAssessment } from '../core/GroupAssessment';
+import { calculateRelativeAssessment } from '../core/RelativeAssessment';
 
-const MatrixCalculator = ({def, err}) => {
-  const [rows, setRows] = useState(def.length);
-  const [cols, setCols] = useState(def[0].length);
-  const [error, setError] = useState(err)
+const MatrixCalculator = ({def}) => {
+  const [size, setSize] = useState(def.length);
   const [matrix, setMatrix] = useState(def);
-
   const [results, setResults] = useState(null);
 
-  const initMatrix = (rows, cols) => {
-    const newMatrix = Array(rows).fill().map(() => Array(cols).fill(0));
+  const initMatrix = (size) => {
+    const newMatrix = Array(size).fill().map(() => Array(size).fill(0));
     setMatrix(newMatrix);
   };
 
-  const handleColsChange = (e) => {
+  const handleDimensionChange = (e) => {
     const numValue = parseInt(e.target.value) || 1;
-    setCols(numValue);
-    initMatrix(rows, numValue);
-  };
-
-  const handleRowsChange = (e) => {
-    const numValue = parseInt(e.target.value) || 1;
-    setRows(numValue);
-    initMatrix(numValue, cols);
+    setSize(numValue);
+    initMatrix(numValue);
   };
 
   const handleMatrixChange = (e, row, col) => {
@@ -35,13 +26,10 @@ const MatrixCalculator = ({def, err}) => {
   };
 
   const calculateResults = () => {
-    setResults(calculateGroupAssessment(matrix, error));
+    setResults(calculateRelativeAssessment(matrix));
   };
   const setDefault = () => {
-    setRows(def.length);
-    setCols(def[0].length);
-    console.log(err);
-    setError(err);
+    setSize(def.length);
     setMatrix(def);
   };
 
@@ -53,45 +41,22 @@ const MatrixCalculator = ({def, err}) => {
         <h3>Задайте размерность матрицы:</h3>
         <div className="dimension-inputs">
           <div>
-            <label>Строк: </label>
+            <label>Кол-во экспертов: </label>
             <input
               type="number"
               name="rows"
               min="1"
-              onChange={handleRowsChange}
+              onChange={handleDimensionChange}
               className="dimension-input"
-              value={rows}
-            />
-          </div>
-          <div>
-            <label>Столбцов: </label>
-            <input
-              type="number"
-              name="cols"
-              min="1"
-              onChange={handleColsChange}
-              className="dimension-input"
-              value={cols}
-            />
-          </div>
-          <div>
-            <label>Ошибка: </label>
-            <input
-              type="number"
-              name="error"
-              min="1"
-              onChange={(e) => setError(Number(e.target.value))}
-              className="dimension-input"
-              value={error}
+              value={size}
             />
           </div>
         </div>
-
       </div>
 
       <div className="matrix-editor">
         <h3>Введите матрицу оценок:</h3>
-        <div className='row center'>
+        <div className="row center">
           <table className="matrix-table">
             <tbody>
               {matrix.map((row, rowIndex) => (
