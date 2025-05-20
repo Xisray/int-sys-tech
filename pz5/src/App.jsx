@@ -32,7 +32,7 @@ function forwardStep(vectorX, inputWeights, outputWeights, k, debug) {
 
   debug.str += `Вектор S для выходного слоя: \n`;
   const vectorSForY = getVectorS(vectorY, outputWeights, debug);
-
+  // const y = vectorSForY.reduce((prev, cur) => prev * cur) * 0.7;
   const y = ActivationFunctions.Sigmoid.func(
     vectorSForY.reduce((prev, cur) => prev * cur),
     k

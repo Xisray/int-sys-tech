@@ -35,7 +35,7 @@ const MatrixCalculator = ({def}) => {
 
   return (
     <div className="matrix-container">
-      <h2>Калькулятор групповых оценок</h2>
+      <h2>Коэффициент компетентности экспертов</h2>
       <button onClick={setDefault}>Пресет</button>
       <div className="dimension-controls">
         <h3>Задайте размерность матрицы:</h3>

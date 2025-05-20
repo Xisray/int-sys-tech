@@ -14,9 +14,9 @@ export default {
     },
     inputWeights: [
       [0.6, 0.9],
-      [0.1, 0.5],
+      [0.4, 0.6],
     ],
-    outputWeights: [[0.3], [0.8]],
+    outputWeights: [[0.9], [0.8]],
     k: 0.9,
     speedRatio: 0.7,
   },
